@@ -84,11 +84,14 @@ class GameOf15(tk.Frame):
         self.button_grid.reset()
 
     def create_widgets(self):
-        self.new_button = tk.Button(self, text='New', command=self.reset)
-        self.new_button.grid()
-        self.exit_button = tk.Button(self, text='Exit', command=self.quit)
-        self.exit_button.grid()
-        self.button_grid = Grid(self, nb_cols=2, nb_rows=2)
+        self.utility_row = tk.Frame(self)
+        self.new_button = tk.Button(self.utility_row, text='New', command=self.reset)
+        self.new_button.grid(row=0, column=0)
+        self.exit_button = tk.Button(self.utility_row, text='Exit', command=self.quit)
+        self.exit_button.grid(row=0, column=1)
+        self.utility_row.grid()
+
+        self.button_grid = Grid(self)
 
 
 if __name__ == '__main__':
