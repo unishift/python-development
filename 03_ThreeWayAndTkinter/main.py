@@ -12,9 +12,13 @@ class Grid(tk.Frame):
         self.nb_cols = nb_cols
 
         self.buttons = []
-
-        self.grid()
         self.reset()
+
+        for col in range(self.nb_cols):
+            self.grid_columnconfigure(col, weight=1)
+
+        for row in range(self.nb_rows):
+            self.grid_rowconfigure(row, weight=1)
 
     def reset(self):
         for button in self.buttons:
@@ -43,7 +47,7 @@ class Grid(tk.Frame):
                 continue
 
             pos, row, col = self.get_number_pos(number)
-            self.buttons[number].grid(row=row, column=col)
+            self.buttons[number].grid(row=row, column=col, sticky=tk.NSEW)
 
     def win_condition(self):
         return self.numbers == list(range(len(self.numbers) - 1)) + [None]
@@ -65,7 +69,11 @@ class Grid(tk.Frame):
 
     def create_widgets(self):
         self.buttons = [
-            tk.Button(self, text=str(number + 1), command=partial(self.on_press, number))
+            tk.Button(
+                self,
+                text=str(number + 1),
+                command=partial(self.on_press, number),
+            )
             for number in range(len(self.numbers) - 1)
         ]
 
@@ -73,8 +81,10 @@ class Grid(tk.Frame):
 class GameOf15(tk.Frame):
     def __init__(self, master=None):
         super().__init__(master)
-        self.grid()
         self.create_widgets()
+
+        self.grid_rowconfigure(1, weight=1)
+        self.grid_columnconfigure(0, weight=1)
 
     def endgame(self):
         self.button_grid.freeze = True
@@ -89,12 +99,17 @@ class GameOf15(tk.Frame):
         self.new_button.grid(row=0, column=0)
         self.exit_button = tk.Button(self.utility_row, text='Exit', command=self.quit)
         self.exit_button.grid(row=0, column=1)
-        self.utility_row.grid()
+        self.utility_row.grid(row=0)
 
         self.button_grid = Grid(self)
+        self.button_grid.grid(row=1, sticky=tk.NSEW)
 
 
 if __name__ == '__main__':
     app = GameOf15()
     app.master.title('Game of 15')
+    app.master.attributes('-type', 'dialog')
+    app.grid(sticky=tk.NSEW)
+    app.master.grid_rowconfigure(0, weight=1)
+    app.master.grid_columnconfigure(0, weight=1)
     app.mainloop()
