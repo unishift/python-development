@@ -34,7 +34,24 @@ class Grid(tk.Frame):
     def generate_grid(self):
         self.numbers = list(range(self.nb_rows * self.nb_cols - 1))
         self.numbers.append(None)
-        random.shuffle(self.numbers)
+
+        # Shuffle numbers and ensure solvability
+
+        def solvable(numbers, nb_cols):
+            N = 0
+            for pos, number in enumerate(numbers):
+                if number is None:
+                    N += pos // nb_cols + 1  # Row of empty cell
+                else:
+                    # Count value less than `number` after it
+                    N += sum(map(lambda x: x is not None and x < number, numbers[pos:]))
+
+            return N % 2 == 0
+
+        while True:
+            random.shuffle(self.numbers)
+            if solvable(self.numbers, self.nb_cols):
+                break
 
     def get_number_pos(self, number):
         pos = self.numbers.index(number)
