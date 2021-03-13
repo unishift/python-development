@@ -2,6 +2,7 @@ import random
 from functools import partial
 
 import tkinter as tk
+from tkinter import messagebox as mb
 
 
 class Grid(tk.Frame):
@@ -87,8 +88,8 @@ class GameOf15(tk.Frame):
         self.grid_columnconfigure(0, weight=1)
 
     def endgame(self):
-        self.button_grid.freeze = True
-        print('Congratulations!')
+        mb.showinfo('Congratulations', 'You win!')
+        self.reset()
 
     def reset(self):
         self.button_grid.reset()
